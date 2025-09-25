@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Carbon Emission Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(20, 40, 50, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        h1 {
+            color: #34d399;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 0 2px 10px rgba(52, 211, 153, 0.3);
+        }
+
+        .subtitle {
+            color: #a0aec0;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(30, 50, 60, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .status-value {
+            font-weight: bold;
+            color: #34d399;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(20, 40, 50, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .card h2 {
+            color: #34d399;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #a0aec0;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(52, 211, 153, 0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: rgba(30, 50, 60, 0.8);
+            color: #e0e0e0;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #34d399;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+            background: linear-gradient(45deg, #34d399, #10b981);
+        }
+
+        .btn:disabled {
+            background: rgba(100, 116, 139, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn.success {
+            background: linear-gradient(45deg, #059669, #047857);
+        }
+
+        .btn.success:hover {
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.5);
+        }
+
+        .btn.warning {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+        }
+
+        .btn.warning:hover {
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .emission-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .emission-inputs .form-group {
+            margin-bottom: 15px;
+        }
+
+        .info-section {
+            background: rgba(20, 40, 50, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .info-section h2 {
+            color: #34d399;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: rgba(30, 50, 60, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #34d399;
+        }
+
+        .info-card h3 {
+            color: #34d399;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .alert.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.5);
+        }
+
+        .alert.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .alert.info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .privacy-badge {
+            background: linear-gradient(45deg, #a855f7, #c026d3);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-left: 10px;
+            box-shadow: 0 2px 10px rgba(168, 85, 247, 0.4);
+        }
+
+        .fhe-info {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .company-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            background: rgba(30, 50, 60, 0.5);
+        }
+
+        .company-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .company-item:last-child {
+            border-bottom: none;
+        }
+
+        .company-item strong {
+            color: #e0e0e0;
+        }
+
+        .company-item small {
+            color: #94a3b8;
+        }
+
+        .verification-badge {
+            background: #10b981;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);
+        }
+
+        .pending-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            box-shadow: 0 2px 5px rgba(245, 158, 11, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .emission-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                🌱 Private Carbon Emission Tracker
+                <span class="privacy-badge">🔒 FHE Protected</span>
+            </h1>
+            <p class="subtitle">Confidential Environmental Data Management with Fully Homomorphic Encryption</p>
+
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-label">Current Period</div>
+                    <div class="status-value" id="currentPeriod">-</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Registered Companies</div>
+                    <div class="status-value" id="totalCompanies">-</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Network</div>
+                    <div class="status-value" id="networkStatus">Disconnected</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Account</div>
+                    <div class="status-value" id="accountStatus">Not Connected</div>
+                </div>
+                <div class="status-item">
+                    <button class="btn" id="connectBtn" onclick="connectWallet()" style="padding: 8px 16px; font-size: 14px;">Connect Wallet</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="fhe-info">
+            <strong>🔐 Privacy First:</strong> All emission data is encrypted using Fully Homomorphic Encryption (FHE) from Zama.
+            Your sensitive environmental data remains private while enabling secure aggregation and compliance verification.
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>🏢 Company Registration</h2>
+
+                <div class="alert" id="registrationAlert"></div>
+
+                <div class="form-group">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" id="companyName" placeholder="Enter your company name">
+                </div>
+
+                <button class="btn" id="registerBtn" onclick="registerCompany()">Register Company</button>
+                <button class="btn success" id="verifyCompanyBtn" onclick="verifyCompany()" style="display:none;">Verify Company</button>
+            </div>
+
+            <div class="card">
+                <h2>📊 Emission Report Submission</h2>
+
+                <div class="alert" id="emissionAlert"></div>
+
+                <div class="emission-inputs">
+                    <div class="form-group">
+                        <label for="directEmissions">Direct Emissions (Scope 1)</label>
+                        <input type="number" id="directEmissions" placeholder="Tons CO2" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="indirectEmissions">Indirect Emissions (Scope 2)</label>
+                        <input type="number" id="indirectEmissions" placeholder="Tons CO2" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplyChainEmissions">Supply Chain (Scope 3)</label>
+                        <input type="number" id="supplyChainEmissions" placeholder="Tons CO2" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="energyConsumption">Energy Consumption</label>
+                        <input type="number" id="energyConsumption" placeholder="kWh" min="0">
+                    </div>
+                </div>
+
+                <button class="btn success" id="submitReportBtn" onclick="submitEmissionReport()" disabled>
+                    Submit Encrypted Report
+                </button>
+                <button class="btn warning" id="verifyReportBtn" onclick="verifyReport()" style="display:none;">
+                    Verify Report
+                </button>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>📋 System Information</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>🔒 Privacy Protection</h3>
+                    <p>All emission data is encrypted using Zama's FHE technology, ensuring complete confidentiality while maintaining verifiability.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>✅ Compliance Ready</h3>
+                    <p>Automated reporting periods and verification workflows support regulatory compliance requirements.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>🌍 Environmental Impact</h3>
+                    <p>Track Scope 1, 2, and 3 emissions with energy consumption metrics for comprehensive carbon footprint analysis.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>👥 Multi-Stakeholder</h3>
+                    <p>Secure data sharing between companies, verifiers, and regulators without compromising sensitive information.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>🏭 Registered Companies</h2>
+            <div class="company-list" id="companyList">
+                <div style="text-align: center; color: #7f8c8d; padding: 20px;">
+                    Connect wallet to view registered companies
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" onerror="loadFallbackEthers()"></script>
+    <script>
+        // Fallback CDN loader
+        function loadFallbackEthers() {
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js';
+            script.onerror = function() {
+                const script2 = document.createElement('script');
+                script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js';
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script);
+        }
+
+        // Contract configuration
+        const CONTRACT_ADDRESS = "0x80C36125008d8643b8B59c2ddfE3C2E3Ec98a7B2";
+        const CONTRACT_ABI = [
+            "function registerCompany(string calldata _name) external",
+            "function verifyCompany(address _company) external",
+            "function submitEmissionReport(uint32 _directEmissions, uint32 _indirectEmissions, uint32 _supplyChainEmissions, uint64 _energyConsumption) external",
+            "function verifyEmissionReport(address _company, uint256 _period) external",
+            "function getCompanyInfo(address _company) external view returns (string memory name, bool isRegistered, bool isVerified, uint256 registrationTime)",
+            "function getReportStatus(address _company, uint256 _period) external view returns (bool isSubmitted, bool isVerified, uint256 timestamp)",
+            "function getCurrentPeriod() external view returns (uint256)",
+            "function getTotalCompanies() external view returns (uint256)",
+            "function getRegisteredCompanies() external view returns (address[] memory)",
+            "function isVerifier(address _address) external view returns (bool)",
+            "event CompanyRegistered(address indexed company, string name)",
+            "event EmissionReported(address indexed company, uint256 indexed period)",
+            "event ReportVerified(address indexed company, uint256 indexed period, address indexed verifier)"
+        ];
+
+        let provider;
+        let signer;
+        let contract;
+        let userAccount;
+
+        // Initialize the application
+        async function init() {
+            // Check if ethers is loaded
+            if (typeof ethers === 'undefined') {
+                showAlert('registrationAlert', 'Loading blockchain libraries... Please wait.', 'info');
+                setTimeout(init, 2000); // Retry after 2 seconds
+                return;
+            }
+
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    // Check if already connected
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    if (accounts.length > 0) {
+                        await connectWallet();
+                    }
+                } catch (error) {
+                    console.error('Failed to initialize:', error);
+                    showAlert('emissionAlert', 'Failed to initialize application: ' + error.message, 'error');
+                }
+            } else {
+                showAlert('registrationAlert', 'Please install MetaMask to use this application', 'error');
+                document.getElementById('connectBtn').style.display = 'none';
+            }
+        }
+
+        // Connect to wallet
+        async function connectWallet() {
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                signer = provider.getSigner();
+                userAccount = await signer.getAddress();
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                document.getElementById('accountStatus').textContent =
+                    userAccount.substring(0, 6) + '...' + userAccount.substring(38);
+                document.getElementById('networkStatus').textContent = 'Connected';
+                document.getElementById('connectBtn').textContent = 'Connected';
+                document.getElementById('connectBtn').disabled = true;
+                document.getElementById('connectBtn').style.background = '#27ae60';
+
+                await loadContractData();
+                await checkUserStatus();
+            } catch (error) {
+                console.error('Failed to connect wallet:', error);
+                showAlert('registrationAlert', 'Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+
+        // Load contract data
+        async function loadContractData() {
+            try {
+                const currentPeriod = await contract.getCurrentPeriod();
+                const totalCompanies = await contract.getTotalCompanies();
+
+                document.getElementById('currentPeriod').textContent = currentPeriod.toString();
+                document.getElementById('totalCompanies').textContent = totalCompanies.toString();
+
+                await loadCompanyList();
+            } catch (error) {
+                console.error('Failed to load contract data:', error);
+            }
+        }
+
+        // Check user registration and verification status
+        async function checkUserStatus() {
+            try {
+                const companyInfo = await contract.getCompanyInfo(userAccount);
+                const isVerifier = await contract.isVerifier(userAccount);
+
+                if (companyInfo.isRegistered) {
+                    document.getElementById('companyName').value = companyInfo.name;
+                    document.getElementById('registerBtn').textContent = 'Already Registered';
+                    document.getElementById('registerBtn').disabled = true;
+
+                    if (companyInfo.isVerified) {
+                        document.getElementById('submitReportBtn').disabled = false;
+                        showAlert('registrationAlert', 'Company is verified and ready to submit reports', 'success');
+                    } else {
+                        showAlert('registrationAlert', 'Company registered but pending verification', 'info');
+                    }
+                }
+
+                if (isVerifier) {
+                    document.getElementById('verifyCompanyBtn').style.display = 'block';
+                    document.getElementById('verifyReportBtn').style.display = 'block';
+                }
+
+                await checkReportStatus();
+            } catch (error) {
+                console.error('Failed to check user status:', error);
+            }
+        }
+
+        // Check current period report status
+        async function checkReportStatus() {
+            try {
+                const currentPeriod = await contract.getCurrentPeriod();
+                const reportStatus = await contract.getReportStatus(userAccount, currentPeriod);
+
+                if (reportStatus.isSubmitted) {
+                    document.getElementById('submitReportBtn').textContent = 'Report Already Submitted';
+                    document.getElementById('submitReportBtn').disabled = true;
+
+                    if (reportStatus.isVerified) {
+                        showAlert('emissionAlert', 'Report submitted and verified for current period', 'success');
+                    } else {
+                        showAlert('emissionAlert', 'Report submitted, awaiting verification', 'info');
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to check report status:', error);
+            }
+        }
+
+        // Load and display company list
+        async function loadCompanyList() {
+            try {
+                const companies = await contract.getRegisteredCompanies();
+                const companyListElement = document.getElementById('companyList');
+                companyListElement.innerHTML = '';
+
+                if (companies.length === 0) {
+                    companyListElement.innerHTML = '<div style="text-align: center; color: #7f8c8d; padding: 20px;">No companies registered yet</div>';
+                    return;
+                }
+
+                for (const companyAddress of companies) {
+                    const companyInfo = await contract.getCompanyInfo(companyAddress);
+
+                    const companyItem = document.createElement('div');
+                    companyItem.className = 'company-item';
+                    companyItem.innerHTML = `
+                        <div>
+                            <strong>${companyInfo.name}</strong><br>
+                            <small>${companyAddress.substring(0, 10)}...${companyAddress.substring(32)}</small>
+                        </div>
+                        <div>
+                            ${companyInfo.isVerified ?
+                                '<span class="verification-badge">Verified</span>' :
+                                '<span class="pending-badge">Pending</span>'}
+                        </div>
+                    `;
+                    companyListElement.appendChild(companyItem);
+                }
+            } catch (error) {
+                console.error('Failed to load company list:', error);
+            }
+        }
+
+        // Register company
+        async function registerCompany() {
+            const companyName = document.getElementById('companyName').value;
+            if (!companyName) {
+                showAlert('registrationAlert', 'Please enter a company name', 'error');
+                return;
+            }
+
+            if (!contract) {
+                showAlert('registrationAlert', 'Please connect your wallet first', 'error');
+                return;
+            }
+
+            try {
+                const tx = await contract.registerCompany(companyName);
+                showAlert('registrationAlert', 'Registration transaction sent. Waiting for confirmation...', 'info');
+
+                await tx.wait();
+                showAlert('registrationAlert', 'Company registered successfully!', 'success');
+
+                await checkUserStatus();
+                await loadContractData();
+            } catch (error) {
+                console.error('Registration failed:', error);
+                showAlert('registrationAlert', 'Registration failed: ' + error.message, 'error');
+            }
+        }
+
+        // Verify company (verifier only)
+        async function verifyCompany() {
+            const companyAddress = prompt('Enter company address to verify:');
+            if (!companyAddress) return;
+
+            try {
+                const tx = await contract.verifyCompany(companyAddress);
+                showAlert('registrationAlert', 'Verification transaction sent. Waiting for confirmation...', 'info');
+
+                await tx.wait();
+                showAlert('registrationAlert', 'Company verified successfully!', 'success');
+
+                await loadContractData();
+            } catch (error) {
+                console.error('Verification failed:', error);
+                showAlert('registrationAlert', 'Verification failed: ' + error.message, 'error');
+            }
+        }
+
+        // Submit emission report
+        async function submitEmissionReport() {
+            const directEmissions = document.getElementById('directEmissions').value;
+            const indirectEmissions = document.getElementById('indirectEmissions').value;
+            const supplyChainEmissions = document.getElementById('supplyChainEmissions').value;
+            const energyConsumption = document.getElementById('energyConsumption').value;
+
+            if (!directEmissions || !indirectEmissions || !supplyChainEmissions || !energyConsumption) {
+                showAlert('emissionAlert', 'Please fill in all emission data fields', 'error');
+                return;
+            }
+
+            try {
+                const tx = await contract.submitEmissionReport(
+                    parseInt(directEmissions),
+                    parseInt(indirectEmissions),
+                    parseInt(supplyChainEmissions),
+                    parseInt(energyConsumption)
+                );
+
+                showAlert('emissionAlert', 'Report submission transaction sent. Waiting for confirmation...', 'info');
+
+                await tx.wait();
+                showAlert('emissionAlert', 'Emission report submitted successfully! Data is now encrypted and stored.', 'success');
+
+                await checkReportStatus();
+            } catch (error) {
+                console.error('Report submission failed:', error);
+                showAlert('emissionAlert', 'Report submission failed: ' + error.message, 'error');
+            }
+        }
+
+        // Verify report (verifier only)
+        async function verifyReport() {
+            const companyAddress = prompt('Enter company address to verify report:');
+            if (!companyAddress) return;
+
+            const period = prompt('Enter reporting period:');
+            if (!period) return;
+
+            try {
+                const tx = await contract.verifyEmissionReport(companyAddress, parseInt(period));
+                showAlert('emissionAlert', 'Verification transaction sent. Waiting for confirmation...', 'info');
+
+                await tx.wait();
+                showAlert('emissionAlert', 'Report verified successfully!', 'success');
+            } catch (error) {
+                console.error('Report verification failed:', error);
+                showAlert('emissionAlert', 'Report verification failed: ' + error.message, 'error');
+            }
+        }
+
+        // Show alert message
+        function showAlert(elementId, message, type) {
+            const alertElement = document.getElementById(elementId);
+            alertElement.textContent = message;
+            alertElement.className = `alert ${type}`;
+            alertElement.style.display = 'block';
+
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize the application when page loads
+        window.addEventListener('load', init);
+
+        // Handle account changes
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length === 0) {
+                    document.getElementById('accountStatus').textContent = 'Not Connected';
+                    document.getElementById('networkStatus').textContent = 'Disconnected';
+                    document.getElementById('connectBtn').textContent = 'Connect Wallet';
+                    document.getElementById('connectBtn').disabled = false;
+                    document.getElementById('connectBtn').style.background = '';
+                    contract = null;
+                    userAccount = null;
+                } else {
+                    init();
+                }
+            });
+
+            window.ethereum.on('chainChanged', () => {
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
