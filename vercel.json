@@ -6,7 +6,6 @@
   "installCommand": null,
   "devCommand": null,
   "ignoreCommand": null,
-  "functions": {},
   "headers": [
     {
       "source": "/contracts/(.*)",
