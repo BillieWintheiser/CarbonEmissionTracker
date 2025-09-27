@@ -61,7 +61,7 @@ The `CarbonEmissionTracker` contract provides:
 
 ## Contract Address
 
-**Deployed Contract**: `0x[Contract Address]`
+**Deployed Contract**: `0x80C36125008d8643b8B59c2ddfE3C2E3Ec98a7B2`
 **Network**: Zama Sepolia Testnet
 **Verification**: Verified on block explorer
 
