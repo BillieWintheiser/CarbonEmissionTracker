@@ -1,0 +1,7 @@
+# directories
+**/artifacts
+**/node_modules
+**/cache
+**/coverage
+**/dist
+**/types
