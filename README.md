@@ -70,7 +70,7 @@ User Input → FHE Encryption → Smart Contract → Encrypted Storage
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/carbon-emission-tracker.git
+git clone https://github.com/BillieWintheiser/CarbonEmissionTracker.git
 cd carbon-emission-tracker
 
 # Install dependencies
@@ -607,9 +607,9 @@ in the Software without restriction...
 
 ## 📧 Contact
 
-- **GitHub**: [github.com/your-username/carbon-emission-tracker](https://github.com/your-username/carbon-emission-tracker)
-- **Issues**: [github.com/your-username/carbon-emission-tracker/issues](https://github.com/your-username/carbon-emission-tracker/issues)
-- **Discussions**: [github.com/your-username/carbon-emission-tracker/discussions](https://github.com/your-username/carbon-emission-tracker/discussions)
+- **GitHub**: [github.com/BillieWintheiser/CarbonEmissionTracker](https://github.com/BillieWintheiser/CarbonEmissionTracker)
+- **Issues**: [github.com/BillieWintheiser/CarbonEmissionTracker/issues](https://github.com/BillieWintheiser/CarbonEmissionTracker/issues)
+- **Discussions**: [github.com/BillieWintheiser/CarbonEmissionTracker/discussions](https://github.com/BillieWintheiser/CarbonEmissionTracker/discussions)
 
 ---
 
