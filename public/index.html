@@ -475,19 +475,42 @@
         // Contract configuration
         const CONTRACT_ADDRESS = "0x80C36125008d8643b8B59c2ddfE3C2E3Ec98a7B2";
         const CONTRACT_ABI = [
+            // Core Functions
             "function registerCompany(string calldata _name) external",
             "function verifyCompany(address _company) external",
             "function submitEmissionReport(uint32 _directEmissions, uint32 _indirectEmissions, uint32 _supplyChainEmissions, uint64 _energyConsumption) external",
             "function verifyEmissionReport(address _company, uint256 _period) external",
+            "function closePeriodAndAdvance() external",
+            "function addVerifier(address _verifier) external",
+            "function removeVerifier(address _verifier) external",
+            "function grantReportAccess(address _to, uint256 _period) external",
+
+            // Gateway Functions (NEW)
+            "function addPauser(address _pauser) external",
+            "function removePauser(address _pauser) external",
+            "function pause() external",
+            "function unpause() external",
+            "function updateKmsGeneration(uint256 _newGeneration) external",
+            "function requestDecryption(bytes32 _encryptedValue) external returns (uint256)",
+
+            // View Functions
             "function getCompanyInfo(address _company) external view returns (string memory name, bool isRegistered, bool isVerified, uint256 registrationTime)",
             "function getReportStatus(address _company, uint256 _period) external view returns (bool isSubmitted, bool isVerified, uint256 timestamp)",
+            "function getPeriodStats(uint256 _period) external view returns (uint256 participatingCompanies, uint256 totalReports, bool periodClosed, uint256 closeTime)",
             "function getCurrentPeriod() external view returns (uint256)",
             "function getTotalCompanies() external view returns (uint256)",
             "function getRegisteredCompanies() external view returns (address[] memory)",
             "function isVerifier(address _address) external view returns (bool)",
+            "function isPublicDecryptAllowed() external view returns (bool)",
+            "function isPauser(address _address) external view returns (bool)",
+            "function isContractPaused() external view returns (bool)",
+
+            // Events
             "event CompanyRegistered(address indexed company, string name)",
+            "event CompanyVerified(address indexed company, address indexed verifier)",
             "event EmissionReported(address indexed company, uint256 indexed period)",
-            "event ReportVerified(address indexed company, uint256 indexed period, address indexed verifier)"
+            "event ReportVerified(address indexed company, uint256 indexed period, address indexed verifier)",
+            "event PeriodClosed(uint256 indexed period, uint256 participatingCompanies)"
         ];
 
         let provider;
