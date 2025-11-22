@@ -1,0 +1,17 @@
+{
+  "extends": "solhint:recommended",
+  "rules": {
+    "compiler-version": ["error", "^0.8.0"],
+    "func-visibility": ["warn", {"ignoreConstructors": true}],
+    "max-line-length": ["warn", 120],
+    "not-rely-on-time": "off",
+    "no-empty-blocks": "warn",
+    "no-unused-vars": "warn",
+    "gas-custom-errors": "warn",
+    "avoid-low-level-calls": "warn",
+    "avoid-sha3": "warn",
+    "check-send-result": "error",
+    "reentrancy": "error",
+    "state-visibility": "error"
+  }
+}
