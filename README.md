@@ -6,7 +6,7 @@
 [![Zama FHEVM](https://img.shields.io/badge/Powered%20by-Zama%20FHEVM-blue)](https://docs.zama.ai/fhevm)
 [![Sepolia Testnet](https://img.shields.io/badge/Network-Sepolia-purple)](https://sepolia.etherscan.io/)
 
-🌐 **[Live Demo](https://carbon-emission-tracker-ruby.vercel.app/)** | 📹 **[Video Demo CarbonEmissionTracker.mp4](./)** | 📄 **[Documentation](./DEPLOYMENT.md)**
+🌐 **[Live Demo](https://carbon-emission-tracker-ruby.vercel.app/)** | 📹 **[Video Demo ](https://youtu.be/wdHVy_z7sCI)** | 📄 **[Documentation](./DEPLOYMENT.md)**
 
 > Track Scope 1, 2, and 3 emissions with complete data confidentiality. Built with Fully Homomorphic Encryption (FHE) for enterprise-grade privacy.
 
